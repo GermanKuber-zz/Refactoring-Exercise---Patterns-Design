@@ -1,1 +1,1 @@
-# Refactoring-Exercise---Patterns-Design
+# Refactoring Exercise Patterns Design
