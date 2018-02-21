@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace RefactoringExercisePatternsDesign
 {
@@ -14,20 +16,32 @@ namespace RefactoringExercisePatternsDesign
             int sum = 0;
             bool isOddPos = true;
 
-            while (number >0)
+
+            foreach (var digit in GetDigitsOf(number))
             {
-                int digit = (int)(number % 10);
+
                 if (isOddPos)
                     sum += 3 * digit;
                 else
                     sum += digit;
-                number /= 10;
                 isOddPos = !isOddPos;
             }
 
             int modulo = sum % 7;
             return modulo;
 
+        }
+
+        private static IEnumerable<int> GetDigitsOf( long number)
+        {
+            IList<int> digits = new List<int>();
+            while (number > 0)
+            {
+                digits.Add((int)(number % 10));
+                number /= 10;
+            }
+
+            return digits;
         }
     }
 }
