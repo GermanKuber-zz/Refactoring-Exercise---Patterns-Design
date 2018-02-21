@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RefactoringExercisePatternsDesign
 {
@@ -11,29 +12,40 @@ namespace RefactoringExercisePatternsDesign
             Console.WriteLine(GetControlDigit(989));
         }
 
-        static int GetControlDigit(long number)
+        static int GetControlDigit(long number) =>
+            GetDigitsOf(number)
+                        .Zip(MultiplyingFactors, (a, b) => a * b)
+                        .Sum() % 7;
+
+        private static IList<int> GetDigitsOf(long number, IEnumerator<int> factor)
         {
-            int sum = 0;
-            bool isOddPos = true;
-
-
+            IList<int> pondereDigits = new List<int>();
             foreach (var digit in GetDigitsOf(number))
             {
-
-                if (isOddPos)
-                    sum += 3 * digit;
-                else
-                    sum += digit;
-                isOddPos = !isOddPos;
+                factor.MoveNext();
+                pondereDigits.Add(digit * factor.Current);
             }
 
-            int modulo = sum % 7;
-            return modulo;
-
+            return pondereDigits;
         }
 
-        private static IEnumerable<int> GetDigitsOf( long number)
+        public static IEnumerable<int> MultiplyingFactors
         {
+            get
+            {
+                int factor = 3;
+
+                while (true)
+                {
+                    yield return factor;
+                    factor = 4 - factor;
+                }
+            }
+        }
+
+        private static IEnumerable<int> GetDigitsOf(long number)
+        {
+
             IList<int> digits = new List<int>();
             while (number > 0)
             {
